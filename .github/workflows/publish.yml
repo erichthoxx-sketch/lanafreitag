@@ -1,0 +1,51 @@
+name: Публикация lanafreitag.ru
+# Сайт собирается из основного хранилища erichthoxx-sketch/mine (папка site/) и выкладывается в ветку gh-pages.
+# Запускается: вручную (после правок сайта в mine), при правках здесь и раз в 6 часов — на всякий случай.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 */6 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: publish
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: erichthoxx-sketch/mine
+          ref: claude/author-income-ads-tracker-3zjbxd
+          path: src
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Проверка сайта
+        run: cd src && node --test tests/site.test.js
+      - name: Сборка
+        run: |
+          V=v$(git -C src rev-parse --short=8 HEAD)
+          mkdir -p out/admin out/js
+          cp src/js/firebase-config.js out/js/
+          cp src/site/*.js src/site/*.css src/site/*.jpg src/site/*.png out/
+          cp src/site/admin/*.js src/site/admin/*.css out/admin/
+          # все части сайта — с номером версии, чтобы браузер не смешивал старые и новые файлы
+          sed -i "s#\(from '\.\{1,2\}/[^']*\.js\)'#\1?v=$V'#g" out/*.js out/admin/*.js
+          sed "s#__V__#$V#g" src/site/index.html > out/index.html
+          sed "s#__V__#$V#g" src/site/admin/index.html > out/admin/index.html
+          grep -q "content.js?v=$V" out/site.js
+          echo lanafreitag.ru > out/CNAME
+          touch out/.nojekyll
+      - name: Выкладка в gh-pages
+        run: |
+          cd out
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Сайт из mine@$(git -C ../src rev-parse --short=8 HEAD)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
