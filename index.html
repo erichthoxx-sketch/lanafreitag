@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Лана Фрейтаг</title>
+<meta name="description" content="Лана Фрейтаг — любовные романы. Новые главы на Литнете.">
+<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0f13" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?12">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?12">
+<link rel="apple-touch-icon" href="icon-bear.png?12">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@1,400;1,500&family=Golos+Text:wght@400;500&family=Oranienbaum&display=swap">
+<link rel="stylesheet" href="site.css?v=vc876760f">
+</head>
+<body>
+<header class="top" id="head"></header>
+<main id="top"></main>
+<footer class="foot" id="foot"></footer>
+<script type="module" src="site.js?v=vc876760f"></script>
+<script>
+// Страховка: если сайт не собрался за 8 секунд (браузер держал старые файлы) — один раз загружаем заново
+setTimeout(function () {
+  if (document.getElementById('top').innerHTML.trim()) return;
+  try { if (sessionStorage.getItem('siteReload')) return; sessionStorage.setItem('siteReload', '1'); } catch (e) { return; }
+  location.replace(location.pathname + '?r=' + Date.now() + location.search.replace(/^\?/, '&') + location.hash);
+}, 8000);
+</script>
+</body>
+</html>
