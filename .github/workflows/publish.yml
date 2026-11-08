@@ -1,6 +1,8 @@
 name: Публикация lanafreitag.ru
 # Сайт собирается из основного хранилища erichthoxx-sketch/mine (папка site/) и выкладывается в ветку gh-pages.
-# Запускается: вручную (после правок сайта в mine), при правках здесь и раз в 6 часов — на всякий случай.
+# Там же, в папке /my, — приложения владелицы (короткий адрес lanafreitag.ru/my): Доходы, /my/pisatel — Мастерская,
+# /my/direct — Директ, /my/ai — Freitag AI. Их собирает общий скрипт mine/scripts/build-apps.sh (тот же, что для старого адреса).
+# Запускается: вручную (после правок в mine), при правках здесь и раз в 6 часов — на всякий случай.
 on:
   workflow_dispatch:
   push:
@@ -38,6 +40,9 @@ jobs:
           sed "s#__V__#$V#g" src/site/index.html > out/index.html
           sed "s#__V__#$V#g" src/site/admin/index.html > out/admin/index.html
           grep -q "content.js?v=$V" out/site.js
+          # приложения — по короткому адресу lanafreitag.ru/my
+          (cd src && bash scripts/build-apps.sh $V ../out/my)
+          grep -q "$V/js/app.js" out/my/index.html
           echo lanafreitag.ru > out/CNAME
           touch out/.nojekyll
       - name: Выкладка в gh-pages
@@ -47,5 +52,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -q -m "Сайт из mine@$(git -C ../src rev-parse --short=8 HEAD)"
+          git commit -q -m "Сайт и приложения из mine@$(git -C ../src rev-parse --short=8 HEAD)"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
