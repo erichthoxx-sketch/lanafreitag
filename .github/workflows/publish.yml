@@ -40,6 +40,10 @@ jobs:
           grep -q "content.js?v=$V" out/site.js
           echo lanafreitag.ru > out/CNAME
           touch out/.nojekyll
+      - name: Страницы для поисковиков
+        # готовый текст главной и страниц книг /kniga/<адрес>/, sitemap.xml, robots.txt (scripts/site-seo.mjs в mine);
+        # если Firestore не ответил — сайт выкладывается как обычно
+        run: node src/scripts/site-seo.mjs out
       - name: Выкладка в gh-pages
         run: |
           cd out
