@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /*?preview
+Disallow: /*?kabinet
+
+Sitemap: https://lanafreitag.ru/sitemap.xml
