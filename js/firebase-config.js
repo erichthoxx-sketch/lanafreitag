@@ -1,0 +1,13 @@
+// Настройки проекта Firebase «dohody». Это не секрет: такие значения видны на любом сайте с Firebase,
+// данные защищены правилами доступа (firestore.rules) — каждый видит только своё.
+export const firebaseConfig = {
+  apiKey: 'AIzaSyCoALw20n0j0iFtAEaN3KIaLUTfoPYS748',
+  authDomain: 'dohody-6d6dd.firebaseapp.com',
+  projectId: 'dohody-6d6dd',
+  storageBucket: 'dohody-6d6dd.firebasestorage.app',
+  messagingSenderId: '759769973589',
+  appId: '1:759769973589:web:8681f61304ad87213b65dc',
+};
+
+// Ключ входа Google для Диска (инструкция — docs/SETUP-WRITER.md). Пока «ВСТАВЬТЕ» — Диск не подключается.
+export const googleClientId = '759769973589-8jf65e42gia3u2tsicoic455jis5ouad.apps.googleusercontent.com';
